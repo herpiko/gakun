@@ -2,7 +2,7 @@
 
 Gakun is an SSH key manager that allows you to manage and switch your SSH keys per host easily. Unlike [skm](https://github.com/TimothyYe/skm), which manages keys in separate directories and utilizes symbolic links, Gakun manages SSH keys directly within the `~/.ssh` directory, as it should be. This approach ensures that whenever you want to return to manual management, you will still have great control over your keys.
 
-This software is still in heavy development. Please use it at your own risk.
+This software is still in heavy development. Please expect breaking changes and use it at your own risk.
 
 ## Usage
 ```
