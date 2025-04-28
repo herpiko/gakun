@@ -180,9 +180,9 @@ func (g *Gakun) Use(profile string, host string) error {
 	newConfig += "\nHost " + host
 	newConfig += "\n  Hostname " + host
 	newConfig += "\n  IdentityFile " + key
-	newConfig += "\n###### gakun end"
+	newConfig += "\n###### gakun end\n"
 
-	_, err = f.WriteString(data + newConfig)
+	_, err = f.WriteString(newConfig + data)
 	if err != nil {
 		return err
 	}
