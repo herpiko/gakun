@@ -170,19 +170,13 @@ func (g *Gakun) Use(profile string, host string) error {
 		return err
 	}
 
-	f, err := os.OpenFile(sshConfigPath, os.O_RDWR|os.O_CREATE, 0755)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
 	newConfig := "###### gakun begin"
 	newConfig += "\nHost " + host
 	newConfig += "\n  Hostname " + host
 	newConfig += "\n  IdentityFile " + key
 	newConfig += "\n###### gakun end\n"
 
-	_, err = f.WriteString(newConfig + data)
+	err = os.WriteFile(sshConfigPath, []byte(newConfig+data), 0644)
 	if err != nil {
 		return err
 	}
@@ -272,7 +266,7 @@ func (g *Gakun) readFileWithSkipSection(filePath string) (string, error) {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	var result strings.Builder
+	var lines []string
 
 	// Flag to track if we're in the section to skip
 	skipSection := false
@@ -295,7 +289,7 @@ func (g *Gakun) readFileWithSkipSection(filePath string) (string, error) {
 
 		// Only append if we're not in the skip section
 		if !skipSection {
-			result.WriteString(line + "\n")
+			lines = append(lines, line)
 		}
 	}
 
@@ -304,5 +298,9 @@ func (g *Gakun) readFileWithSkipSection(filePath string) (string, error) {
 		return "", fmt.Errorf("error reading file: %w", err)
 	}
 
-	return result.String(), nil
+	// Join lines with newlines and add trailing newline if there are lines
+	if len(lines) > 0 {
+		return strings.Join(lines, "\n") + "\n", nil
+	}
+	return "", nil
 }
